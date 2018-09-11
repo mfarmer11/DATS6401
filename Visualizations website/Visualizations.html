@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>DATS 6401 - Individual Project 2 - Manoah Farmer</title>
+		<link rel="stylesheet" type="text/css" href="project_style/style1.css" />
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	
+		<script type="text/javascript">
+			google.charts.load('current',{'packages':['corechart'],'mapsApiKey': 'ODf0dPEKmYHzNQCIEHqi'
+			});
+			google.charts.setOnLoadCallback(drawAllSheets);
+		
+		
+			function drawAllSheets() {
+				drawSheetName('EduExpdta', 'SELECT A,B,C,D,E',
+					eduBarResponseHandler); 
+				drawSheetName('prisPopdta', 'SELECT A,B,C,D,E',
+					prisBarResponseHandler); 
+				drawSheetName('EduExpdta', 'SELECT F,G,H,I,J,K,L,M,N,O,P',
+					eduLineResponseHandler); 
+				drawSheetName('PrisPopdta', 'SELECT F,G,H,I,J,K,L,M,N,O,P',
+					prisLineResponseHandler); 
+				drawSheetName('eduGeodta', 'SELECT A,B',
+					eduGeoResponseHandler);
+				drawSheetName('prisGeodta', 'SELECT A,B',
+					prisGeoResponseHandler);
+				drawSheetName('eduPiedta', 'SELECT A,F',
+					eduPieResponseHandler);
+				drawSheetName('prisPiedta', 'SELECT A,F',
+					prisPieResponseHandler);
+			}//drawAllSheets
+		
+			function drawSheetName(sheetName, query, responseHandler) {
+				var queryString = encodeURIComponent(query);
+				var query = new google.visualization.Query(
+					'https://docs.google.com/spreadsheets/d/1Y-qt11JOScImHGg4872nQi75w5HZHxFzK9yxHsaBdWo/gviz/tq?sheet=' 
+					+ sheetName + '&headers=1&tq=' + queryString);
+				query.send(responseHandler);
+			}//drawSheetName
+		
+			function checkError(response) {
+				if (response.isError()){
+					alert('Error in query: ' + response.getMessage() + ' ' 
+							+ response.getDetailedMessage());
+				};
+			}//checkError
+			
+			function eduBarResponseHandler(response) {
+				checkError(response);
+				var data = response.getDataTable();
+			
+				var options = {
+					title: 'Educational Spending',
+					titleTextStyle: {color: '#FFF'},
+					height: 600,
+					vAxis: {title: 'Education Expenditure',
+							textStyle:{color: '#FFF'}, 
+							titleTextStyle: {color: '#FFF'},
+							format: 'long'},
+					hAxis: {title: 'Country', 
+							textStyle:{color: '#FFF'},
+							titleTextStyle: {color: '#FFF' }},
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+			
+				var chart = new google.visualization.ColumnChart(
+						document.getElementById('eduBar_div'));
+				chart.draw(data, options);
+			}//eduBarResponseHandler
+		
+			function prisBarResponseHandler(response) {
+				checkError(response);
+				var data = response.getDataTable();
+				var options = {
+					title: 'Imprisonment',
+					titleTextStyle:{color: '#FFF'},
+					height: 600,
+					vAxis: {title: 'Prisoners per Capita',
+							textStyle:{color: '#FFF'}, 
+							titleTextStyle: {color: '#FFF'},
+							format: 'long'},
+					hAxis: {title: 'Country', 
+							textStyle:{color: '#FFF'},
+							titleTextStyle: {color: '#FFF' }},
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+			
+				var chart = new google.visualization.ColumnChart(
+							document.getElementById('prisBar_div'));
+				chart.draw(data, options);
+			}//prisBarResponseHandler
+		
+			
+			function eduLineResponseHandler(response) {
+				checkError(response);
+			
+				var data = response.getDataTable();
+			
+				var options = {
+					title: 'Education Expenditure',
+					legend: { position: 'right' },
+					height: 600,
+					vAxis: {title: 'Educational Spending',
+							textStyle:{color: '#FFF'}, 
+							titleTextStyle: {color: '#FFF'},
+							format: 'long'},
+					hAxis: {title: 'Year', 
+							textStyle:{color: '#FFF'},
+							titleTextStyle: {color: '#FFF'},
+							ticks: [new Date(2010), new Date(2011), new Date(2012), new Date(2013)],
+							format: ''},
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+
+				var chart = new google.visualization.LineChart(
+					document.getElementById('eduLine_div'));
+				chart.draw(data, options);
+			}//eduLineResponseHandler
+		
+			function prisLineResponseHandler(response) {
+				checkError(response);
+			
+				var data = response.getDataTable();
+				
+				var options = {
+					title: 'Prison Population',
+					legend: { position: 'right' },
+					height: 600,
+					vAxis: {title: 'Prisoners',
+							textStyle:{color: '#FFF'}, 
+							titleTextStyle: {color: '#FFF'},
+							format: 'long'},
+					hAxis: {title: 'Year', 
+							textStyle:{color: '#FFF'},
+							titleTextStyle: {color: '#FFF'},
+							ticks: [new Date(2010), new Date(2011), new Date(2012), new Date(2013)],
+							format: ''},
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+
+				var chart = new google.visualization.LineChart(
+					document.getElementById('prisLine_div'));
+				chart.draw(data, options);
+			}//eduLineResponseHandler
+				
+			function eduGeoResponseHandler(response) {
+			
+				checkError(response);
+
+			
+				var data = response.getDataTable();
+				data.sort({column:1, desc:true});
+			
+				var options = {
+					colorAxis: {colors: ['blue','yellow', 'red']}, //orange to blue
+					title: 'Growth in Educational Expenditure',
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+		
+				var chart = new google.visualization.GeoChart(
+							document.getElementById('eduGeo_div'));
+					chart.draw(data, options);
+			};//eduGeoResponseHandler
+			
+			function prisGeoResponseHandler(response) {
+			
+				checkError(response);
+
+			
+				var data = response.getDataTable();
+				data.sort({column:1, desc:true});
+			
+				var options = {
+					colorAxis: {colors: ['blue','yellow', 'red']}, //orange to blue
+					title: 'Number of Prisoners',
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+		
+				var chart = new google.visualization.GeoChart(
+							document.getElementById('prisGeo_div'));
+					chart.draw(data, options);
+			};//prisGeoResponseHandler
+			
+			function eduPieResponseHandler(response) {
+				var data = response.getDataTable();
+					data.sort({column:1, desc:true});
+			
+				var options = {
+					title: 'Share of Expenditure',
+					titleTextStyle:{color: '#FFF'},
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+			
+				var chart = new google.visualization.PieChart(
+					document.getElementById('eduPie_div'));
+				chart.draw(data, options);
+			};//eduPieResponseHandler
+			
+			function prisPieResponseHandler(response) {
+				var data = response.getDataTable();
+					data.sort({column:1, desc:true});
+			
+				var options = {
+					title: 'Share of Prison Population',
+					titleTextStyle:{color: '#FFF'},
+					backgroundColor: {
+					fill: '#000000',
+					fillOpacity: 0.9},
+					legendTextStyle: { color: '#FFF' },
+				};
+			
+				var chart = new google.visualization.PieChart(
+					document.getElementById('prisPie_div'));
+				chart.draw(data, options);
+			};//prisPieResponseHandler
+		</script>
+	</head>
+
+<body>
+	<div id="main">
+		<div id="header">
+			<div id="image">
+				<div id="image_text">
+					<h1>Exploration of Educational Expenditure and Imprisonment (2010-2013)</h1>
+					<h3>Presented by Manoah Farmer</h3>
+					<br /><br /><br /><br />
+					<h2>Educational  Expenditure</h2>
+					<br /><br /><br />
+					<h2>Number of Prisoners</h2>
+					<br /><br /><br />
+					<h2>Gross  Domestic Product(GDP)</h2>
+				</div><!--image_text-->
+			</div><!--image-->
+		</div><!--header-->
+		<br /><br /><br /><br /><br /><br /><br /><br /><br />
+		<br /><br /><br /><br /><br /><br /><br /><br /><br />
+		<br /><br /><br /><br /><br /><br /><br /><br /><br />
+		<div id="BarChart">
+			<h1>Bar Charts of the Largest Countries (in terms of GDP)</h1>
+			<table>
+				<tr>
+					<td><div id="eduBar_div" style="width:545px"></div></td><!--BarChartEdu-->
+					<td><div id="prisBar_div" style="width:545px"></div></td><!--BarChartPrison-->						
+				</tr>
+			</table>
+			<br /><br />
+			
+			<h1>Growth of the Largest Countries (in terms of GDP)</h1>
+			<table>
+				<tr>
+					<td><div id="eduLine_div" style="width:545px"></div></td> <!--4yearsOfGrowthEdu-->
+					<td><div id="prisLine_div" style="width:545px"></div></td><!--4yearsOfGrowthPrison-->
+				</tr>
+			</table>	
+		</div><!--BarChart-->
+		<br /><br />
+		<div id="eduPie">
+			<h1>Comparing Share of Expenditure to Share of Prisoners</h1>
+			<table>
+				<tr>
+					<td><div id="eduPie_div" style="width:545px; height:600px"></div></td>							
+					<td><div id="prisPie_div" style="width:545px; height:600px"></div></td>	
+				</tr>
+			</table>
+		</div><!--eduPie-->
+		<br /><br />
+		<div id="eduGeo">
+			<h1>Expenditure Growth</h1>
+			<table>
+				<tr>
+					<td><div id="eduGeo_div" style="width:900px; height:600px"></div></td>
+					<!--Geomap of growth from 2010-2013-->
+				</tr>
+			</table>
+		</div><!--eduGeo-->
+		<br /><br />
+		<div id="prisGeo">
+			<h1>Prisoner Population Growth</h1>
+			<table>
+				<tr>
+					<td><div id="prisGeo_div" style="width:900px; height:600px"></div></td>
+					<!--Geomap of growth from 2010-2013-->
+				</tr>
+			</table>
+		</div><!--prisGeo-->
+	</div><!--main-->
+</body>
+</html>

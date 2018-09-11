@@ -1,0 +1,61 @@
+html
+{
+	height: 100%;
+}
+
+*
+{
+	margin: 0 auto;
+	padding: 0;
+}
+body
+{
+	font: normal;
+	
+}
+#main
+{
+	width: 1100px;
+	background-color: #000;
+}
+
+#image {
+	width: 1100px;
+	position: relative;
+	height: 350px;
+	background: url(hbackground.jpg) repeat-x;
+}
+
+#image_text h1, #image_text h3 {
+	padding: 10px 0 0 0;
+	color: #000;
+}
+
+#image_text h2 {
+	font-size: 35px;
+	color: #FFF;
+}
+
+#main, #header{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	color: #000;
+}
+
+
+#BarChart {
+	color: #FFF;
+}
+
+#eduGeo {
+	color: #FFF;
+}
+
+#prisGeo {
+	color: #FFF;
+}
+
+#eduPie {
+	color: #FFF;
+}
